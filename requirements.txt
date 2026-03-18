@@ -1,0 +1,70 @@
+# ─────────────────────────────────────────────
+# Epidemiological Pulse – Python Dependencies
+# Python 3.10+
+# ─────────────────────────────────────────────
+
+# ── Core scientific stack ──────────────────────
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+
+# ── Machine learning ──────────────────────────
+scikit-learn>=1.3.0
+hdbscan>=0.8.33
+joblib>=1.3.0
+
+# ── Time-series forecasting ───────────────────
+prophet>=1.1.4
+
+# ── Deep learning (LSTM) ──────────────────────
+torch>=2.1.0
+torchvision>=0.16.0
+
+# ── Geospatial ────────────────────────────────
+geopy>=2.4.0
+shapely>=2.0.0
+
+# ── Visualization & Dashboard ─────────────────
+plotly>=5.17.0
+dash>=2.14.0
+dash-bootstrap-components>=1.5.0
+dash-leaflet>=0.1.0
+
+# ── Configuration ─────────────────────────────
+pyyaml>=6.0.1
+python-dotenv>=1.0.0
+
+# ── HTTP / API clients ────────────────────────
+requests>=2.31.0
+aiohttp>=3.9.0
+sodapy>=2.2.0          # CDC Socrata API
+
+# ── Progress bars ─────────────────────────────
+tqdm>=4.66.0
+
+# ── Statistical decomposition ─────────────────
+statsmodels>=0.14.0
+
+# ── Testing ───────────────────────────────────
+pytest>=7.4.0
+pytest-cov>=4.1.0
+pytest-mock>=3.12.0
+
+# ── Code quality ──────────────────────────────
+black>=23.9.0
+flake8>=6.1.0
+isort>=5.12.0
+mypy>=1.5.0
+
+# ── Notebook support ──────────────────────────
+jupyter>=1.0.0
+ipykernel>=6.25.0
+nbformat>=5.9.0
+
+# ── Logging / monitoring ──────────────────────
+loguru>=0.7.0
+
+# ── Miscellaneous utilities ───────────────────
+python-dateutil>=2.8.2
+pytz>=2023.3
+click>=8.1.7

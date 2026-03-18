@@ -1,0 +1,237 @@
+##############################################################################
+# Epidemiological Pulse – Population Health Hotspot Detection
+# Main Configuration File
+##############################################################################
+
+project:
+  name: "Epidemiological Pulse"
+  version: "1.0.0"
+  description: "Disease outbreak hotspot detection and ER visit forecasting"
+  output_dir: "outputs"
+  log_dir: "logs"
+  log_level: "INFO"
+
+# ---------------------------------------------------------------------------
+# Data Sources
+# ---------------------------------------------------------------------------
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  synthetic_dir: "data/synthetic"
+
+  # Geographic scope (US-based example)
+  regions:
+    - zipcode: "10001"
+      city: "New York"
+      state: "NY"
+      lat: 40.7484
+      lon: -73.9967
+    - zipcode: "90001"
+      city: "Los Angeles"
+      state: "CA"
+      lat: 33.9731
+      lon: -118.2479
+    - zipcode: "60601"
+      city: "Chicago"
+      state: "IL"
+      lat: 41.8858
+      lon: -87.6181
+    - zipcode: "77001"
+      city: "Houston"
+      state: "TX"
+      lat: 29.7543
+      lon: -95.3677
+    - zipcode: "85001"
+      city: "Phoenix"
+      state: "AZ"
+      lat: 33.4484
+      lon: -112.0740
+    - zipcode: "19101"
+      city: "Philadelphia"
+      state: "PA"
+      lat: 39.9526
+      lon: -75.1652
+    - zipcode: "78201"
+      city: "San Antonio"
+      state: "TX"
+      lat: 29.4241
+      lon: -98.4936
+    - zipcode: "75201"
+      city: "Dallas"
+      state: "TX"
+      lat: 32.7767
+      lon: -96.7970
+    - zipcode: "95101"
+      city: "San Jose"
+      state: "CA"
+      lat: 37.3382
+      lon: -121.8863
+    - zipcode: "78701"
+      city: "Austin"
+      state: "TX"
+      lat: 30.2672
+      lon: -97.7431
+    - zipcode: "32801"
+      city: "Jacksonville"
+      state: "FL"
+      lat: 30.3322
+      lon: -81.6557
+    - zipcode: "94102"
+      city: "San Francisco"
+      state: "CA"
+      lat: 37.7749
+      lon: -122.4194
+    - zipcode: "43201"
+      city: "Columbus"
+      state: "OH"
+      lat: 39.9612
+      lon: -82.9988
+    - zipcode: "28201"
+      city: "Charlotte"
+      state: "NC"
+      lat: 35.2271
+      lon: -80.8431
+    - zipcode: "46201"
+      city: "Indianapolis"
+      state: "IN"
+      lat: 39.7684
+      lon: -86.1581
+
+  date_range:
+    start: "2022-01-01"
+    end: "2024-12-31"
+
+# ---------------------------------------------------------------------------
+# Synthetic Data Generation
+# ---------------------------------------------------------------------------
+synthetic:
+  seed: 42
+  n_regions: 15
+  n_days: 1095   # ~3 years
+
+  pharmacy:
+    base_sales_mean: 150
+    base_sales_std: 30
+    seasonal_amplitude: 40
+    outbreak_probability: 0.03
+    outbreak_multiplier_min: 2.0
+    outbreak_multiplier_max: 4.5
+    noise_std: 15
+
+  social_media:
+    base_sentiment_negative: 0.12
+    seasonal_amplitude: 0.05
+    outbreak_sentiment_boost: 0.25
+    noise_std: 0.03
+
+  weather:
+    temp_mean_summer: 28.0
+    temp_mean_winter: 5.0
+    humidity_mean: 60.0
+    humidity_std: 15.0
+    precipitation_prob: 0.25
+    precipitation_max: 50.0
+
+  aqi:
+    base_aqi: 45
+    aqi_std: 20
+    seasonal_amplitude: 15
+    spike_probability: 0.05
+    spike_multiplier: 2.5
+
+  er_visits:
+    base_visits_mean: 120
+    base_visits_std: 20
+    seasonal_amplitude: 35
+    weather_effect_coef: 0.8
+    aqi_effect_coef: 0.3
+    pharmacy_lag_coef: 0.4
+    noise_std: 10
+
+# ---------------------------------------------------------------------------
+# Feature Engineering
+# ---------------------------------------------------------------------------
+features:
+  lag_days: [1, 3, 7, 14]
+  rolling_windows: [3, 7, 14, 30]
+  anomaly_zscore_threshold: 2.5
+  stl_period: 7   # weekly seasonality
+  target_column: "er_visits"
+
+# ---------------------------------------------------------------------------
+# Clustering (HDBSCAN)
+# ---------------------------------------------------------------------------
+clustering:
+  algorithm: "hdbscan"
+  min_cluster_size: 3
+  min_samples: 2
+  metric: "euclidean"
+  cluster_selection_epsilon: 0.5
+  geospatial_weight: 2.0   # weight for lat/lon features
+  risk_thresholds:
+    low: 0.33
+    medium: 0.66
+    high: 1.0
+  geojson_output: "outputs/geojson/hotspots.geojson"
+
+# ---------------------------------------------------------------------------
+# Forecasting – Prophet
+# ---------------------------------------------------------------------------
+prophet:
+  changepoint_prior_scale: 0.05
+  seasonality_prior_scale: 10.0
+  seasonality_mode: "multiplicative"
+  yearly_seasonality: true
+  weekly_seasonality: true
+  daily_seasonality: false
+  forecast_horizon_days: 30
+  interval_width: 0.90
+  model_save_dir: "outputs/models/prophet"
+
+# ---------------------------------------------------------------------------
+# Forecasting – LSTM (Optional)
+# ---------------------------------------------------------------------------
+lstm:
+  enabled: true
+  lookback_window: 14
+  hidden_units: 64
+  dropout_rate: 0.2
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+  test_split: 0.2
+  model_save_dir: "outputs/models/lstm"
+
+# ---------------------------------------------------------------------------
+# Anomaly Detection
+# ---------------------------------------------------------------------------
+anomaly:
+  method: "zscore"          # options: zscore | stl
+  zscore_window: 30
+  zscore_threshold: 2.5
+  stl_robust: true
+  columns_to_check:
+    - "pharmacy_sales"
+    - "negative_sentiment"
+    - "er_visits"
+    - "aqi"
+
+# ---------------------------------------------------------------------------
+# Dashboard
+# ---------------------------------------------------------------------------
+dashboard:
+  host: "0.0.0.0"
+  port: 8050
+  debug: false
+  title: "Epidemiological Pulse Dashboard"
+  mapbox_style: "open-street-map"
+  default_date_range_days: 90
+  refresh_interval_seconds: 300
+
+# ---------------------------------------------------------------------------
+# Evaluation
+# ---------------------------------------------------------------------------
+evaluation:
+  metrics: ["mae", "rmse", "mape"]
+  cv_folds: 5
+  report_output: "outputs/reports/evaluation_report.json"

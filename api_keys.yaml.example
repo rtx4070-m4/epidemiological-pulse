@@ -1,0 +1,46 @@
+##############################################################################
+# API Keys Configuration (EXAMPLE)
+# Copy this file to api_keys.yaml and fill in your real keys.
+# NEVER commit api_keys.yaml to version control.
+##############################################################################
+
+# OpenWeatherMap API (https://openweathermap.org/api)
+openweathermap:
+  api_key: "YOUR_OPENWEATHERMAP_API_KEY_HERE"
+  base_url: "https://api.openweathermap.org/data/2.5"
+
+# AirVisual / IQAir API (https://www.iqair.com/air-pollution-data-api)
+iqair:
+  api_key: "YOUR_IQAIR_API_KEY_HERE"
+  base_url: "https://api.airvisual.com/v2"
+
+# Twitter / X API v2 (https://developer.twitter.com)
+twitter:
+  bearer_token: "YOUR_TWITTER_BEARER_TOKEN_HERE"
+  api_key: "YOUR_TWITTER_API_KEY_HERE"
+  api_secret: "YOUR_TWITTER_API_SECRET_HERE"
+  access_token: "YOUR_TWITTER_ACCESS_TOKEN_HERE"
+  access_token_secret: "YOUR_TWITTER_ACCESS_TOKEN_SECRET_HERE"
+
+# Reddit API (https://www.reddit.com/dev/api)
+reddit:
+  client_id: "YOUR_REDDIT_CLIENT_ID_HERE"
+  client_secret: "YOUR_REDDIT_CLIENT_SECRET_HERE"
+  user_agent: "EpidemPulse/1.0 by YourUsername"
+
+# US Census Geocoder (free, no key required)
+census_geocoder:
+  base_url: "https://geocoding.geo.census.gov/geocoder"
+
+# CDC Wonder API (free, no key required for most endpoints)
+cdc:
+  base_url: "https://data.cdc.gov/resource"
+  er_visits_dataset_id: "YOUR_CDC_DATASET_ID"
+
+# Google Maps Geocoding (optional, for enhanced geocoding)
+google_maps:
+  api_key: "YOUR_GOOGLE_MAPS_API_KEY_HERE"
+
+# Mapbox (for enhanced map tiles in dashboard)
+mapbox:
+  access_token: "YOUR_MAPBOX_ACCESS_TOKEN_HERE"
